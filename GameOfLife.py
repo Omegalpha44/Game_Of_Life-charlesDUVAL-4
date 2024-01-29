@@ -11,7 +11,7 @@ required : tkinter and python3
 '''
 # Constants
 INITIAL_POPULATION = 0.1 # initial population of the grid
-nb_cells = 30 # number of cells in a row/column
+nb_cells =40 # number of cells in a row/column
 
 
 
@@ -19,14 +19,15 @@ nb_cells = 30 # number of cells in a row/column
 user32 = ctypes.windll.user32
 screen_width = user32.GetSystemMetrics(0)
 screen_height = user32.GetSystemMetrics(1)
-
 # Size of the grid
-SIZE_W = int(screen_width / 20) * 10 # wideness of the grid 
-SIZE_H = int(screen_height / 20) * 10# height of the grid
-W_CELLS = int(SIZE_W // nb_cells) # width of a cell
-H_CELLS = int(SIZE_H // nb_cells) # height of a cell
-
-
+# SIZE_W = int(screen_width / 20) * 10 # wideness of the grid 
+# SIZE_H = int(screen_height / 20) * 10# height of the grid
+# W_CELLS = int(SIZE_W // nb_cells) # width of a cell
+# H_CELLS = int(SIZE_H // nb_cells) # height of a cell
+SIZE_W = 200
+SIZE_H = 200
+W_CELLS = 5
+H_CELLS = 5
 # Game class
 
 class Game(object):
@@ -42,6 +43,7 @@ class Game(object):
 
         self.grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
         self.next_grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
+        self.previous_grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
         self.canvas_grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
         
         self.init_grid()
@@ -64,11 +66,11 @@ class Game(object):
         self.update()
         for i in range(SIZE_H):
             for j in range(SIZE_W):
-                if self.grid[i][j] == 1:
-                    self.canvas.itemconfig(self.canvas_grid[i][j], fill="black")
-                else:
-                    self.canvas.itemconfig(self.canvas_grid[i][j], fill="white")
-        
+                if self.grid[i][j] == self.previous_grid[i][j]:
+                    if self.grid[i][j] == 1:
+                        self.canvas.itemconfig(self.canvas_grid[i][j], fill="black")
+                    else:
+                        self.canvas.itemconfig(self.canvas_grid[i][j], fill="white")
         self.canvas.after(100, self.draw_grid)
 
 
@@ -77,7 +79,8 @@ class Game(object):
         for i in range(SIZE_H):
             for j in range(SIZE_W):
                 self.next_grid[i][j] = self.next_state(i, j) 
-        self.grid = self.next_grid
+        self.previous_grid = self.grid.copy()
+        self.grid = self.next_grid.copy()
 
     def next_state(self, i, j):
         """return the next state of the cell at position (i, j)"""
