@@ -1,20 +1,27 @@
 import tkinter as tk 
 import random
 import time
+import ctypes
 '''
 Game of Life game using tkinter for its display.
 required : tkinter and python3
 '''
 
+# Get the screen size
+user32 = ctypes.windll.user32
+screen_width = user32.GetSystemMetrics(0)
+screen_height = user32.GetSystemMetrics(1)
+
 # constants. Change it to define the default parameters of the game
-
-SIZE_W = 50 # wideness of the grid 
-SIZE_H = 50 # height of the grid
-
+SIZE_W = int(screen_width / 20) * 10 # wideness of the grid 
+SIZE_H = int(screen_height / 20) * 10# height of the grid
+nb_cells = 30
+W_CELLS = int(SIZE_W // nb_cells) # width of a cell
+H_CELLS = int(SIZE_H // nb_cells) # height of a cell
 INITIAL_POPULATION = 0.1 # initial population of the grid
 
 
-
+# Game class
 
 class Game(object):
     def __init__(self) -> None:
@@ -24,7 +31,7 @@ class Game(object):
         self.root.protocol("WM_DELETE_WINDOW", self.quit)
         self.root.bind("<Escape>", self.quit)
 
-        self.canvas = tk.Canvas(self.root, width=SIZE_W*10, height=SIZE_H*10, bg="white")
+        self.canvas = tk.Canvas(self.root, width=SIZE_W, height=SIZE_H, bg="white")
         self.canvas.pack()
 
         self.grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
@@ -48,9 +55,9 @@ class Game(object):
         for i in range(SIZE_H):
             for j in range(SIZE_W):
                 if self.grid[i][j] == 1:
-                    self.canvas.create_rectangle(j*10, i*10, j*10+10, i*10+10, fill="black")
+                    self.canvas.create_rectangle(j*W_CELLS, i*H_CELLS, j*W_CELLS+W_CELLS, i*H_CELLS+H_CELLS, fill="black")
                 else:
-                    self.canvas.create_rectangle(j*10, i*10, j*10+10, i*10+10, fill="white")
+                    self.canvas.create_rectangle(j*W_CELLS, i*H_CELLS, j*W_CELLS+W_CELLS, i*H_CELLS+H_CELLS, fill="white")
         self.canvas.update()
 
     def update(self):
@@ -93,4 +100,3 @@ if __name__ == "__main__":
     while True:
         game.update()
         game.draw_grid()
-        time.sleep(0.1)
