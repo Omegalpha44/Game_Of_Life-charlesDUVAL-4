@@ -1,6 +1,7 @@
 import tkinter as tk 
 import random
-
+import threading
+import time
 '''
 Game of Life game using tkinter for its display.
 required : tkinter and python3
@@ -10,8 +11,8 @@ INITIAL_POPULATION = 0.1 # initial population of the grid
 # Size of the grid
 SIZE_W = 200
 SIZE_H = 200
-W_CELLS = 5
-H_CELLS = 5
+W_CELLS = 2
+H_CELLS = 2
 
 
 # Game class
@@ -47,15 +48,15 @@ class Game(object):
     
     def draw_grid(self):
         # draw the grid
-        self.update()
         for i in range(SIZE_H):
             for j in range(SIZE_W):
-                if self.grid[i][j] == self.previous_grid[i][j]:
+                if self.grid[i][j] == self.next_grid[i][j]:
                     if self.grid[i][j] == 1:
                         self.canvas.itemconfig(self.canvas_grid[i][j], fill="black")
                     else:
                         self.canvas.itemconfig(self.canvas_grid[i][j], fill="white")
-        self.canvas.after(100, self.draw_grid)
+        self.update()
+        self.canvas.after(500, self.draw_grid)
 
 
     def update(self):
@@ -70,15 +71,13 @@ class Game(object):
         """return the next state of the cell at position (i, j)"""
         nb_neighbors = self.count_neighbors(i, j)
         if self.grid[i][j] == 1:
-            if nb_neighbors == 2 or nb_neighbors == 3:
+            if nb_neighbors == 2 or nb_neighbors == 3 :
                 return 1
             else:
                 return 0
         else:
-            if nb_neighbors == 3:
+            if nb_neighbors >= 3:
                 return 1
-            else:
-                return 0
 
     def count_neighbors(self, i, j):
         """return the number of neighbors of the cell at position (i, j)"""
@@ -92,7 +91,6 @@ class Game(object):
     def quit(self, any=None):
         self.root.destroy()
 
-
-
+# Main
 if __name__ == "__main__":
     game = Game()
