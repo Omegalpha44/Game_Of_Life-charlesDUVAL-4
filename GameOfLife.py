@@ -11,23 +11,13 @@ required : tkinter and python3
 '''
 # Constants
 INITIAL_POPULATION = 0.1 # initial population of the grid
-nb_cells =40 # number of cells in a row/column
-
-
-
-# Get the screen size
-user32 = ctypes.windll.user32
-screen_width = user32.GetSystemMetrics(0)
-screen_height = user32.GetSystemMetrics(1)
 # Size of the grid
-# SIZE_W = int(screen_width / 20) * 10 # wideness of the grid 
-# SIZE_H = int(screen_height / 20) * 10# height of the grid
-# W_CELLS = int(SIZE_W // nb_cells) # width of a cell
-# H_CELLS = int(SIZE_H // nb_cells) # height of a cell
 SIZE_W = 200
 SIZE_H = 200
 W_CELLS = 5
 H_CELLS = 5
+
+
 # Game class
 
 class Game(object):
