@@ -2,23 +2,29 @@ import tkinter as tk
 import random
 import time
 import ctypes
+import threading 
+import sys
+import os
 '''
 Game of Life game using tkinter for its display.
 required : tkinter and python3
 '''
+# Constants
+INITIAL_POPULATION = 0.1 # initial population of the grid
+nb_cells = 30 # number of cells in a row/column
+
+
 
 # Get the screen size
 user32 = ctypes.windll.user32
 screen_width = user32.GetSystemMetrics(0)
 screen_height = user32.GetSystemMetrics(1)
 
-# constants. Change it to define the default parameters of the game
+# Size of the grid
 SIZE_W = int(screen_width / 20) * 10 # wideness of the grid 
 SIZE_H = int(screen_height / 20) * 10# height of the grid
-nb_cells = 30
 W_CELLS = int(SIZE_W // nb_cells) # width of a cell
 H_CELLS = int(SIZE_H // nb_cells) # height of a cell
-INITIAL_POPULATION = 0.1 # initial population of the grid
 
 
 # Game class
@@ -36,9 +42,13 @@ class Game(object):
 
         self.grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
         self.next_grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
+        self.canvas_grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
         
         self.init_grid()
+        
         self.draw_grid()
+        self.canvas.after(1000, self.update)
+        self.root.mainloop()
     
     def init_grid(self):
         for i in range(SIZE_H):
@@ -47,18 +57,20 @@ class Game(object):
                     self.grid[i][j] = 1
                 else:
                     self.grid[i][j] = 0
+                self.canvas_grid[i][j] = self.canvas.create_rectangle(j*W_CELLS, i*H_CELLS, j*W_CELLS+W_CELLS, i*H_CELLS+H_CELLS, fill="black" if self.grid[i][j] == 1 else "white")
     
     def draw_grid(self):
-        # cleanse the board
-        self.canvas.delete("all")
         # draw the grid
+        self.update()
         for i in range(SIZE_H):
             for j in range(SIZE_W):
                 if self.grid[i][j] == 1:
-                    self.canvas.create_rectangle(j*W_CELLS, i*H_CELLS, j*W_CELLS+W_CELLS, i*H_CELLS+H_CELLS, fill="black")
+                    self.canvas.itemconfig(self.canvas_grid[i][j], fill="black")
                 else:
-                    self.canvas.create_rectangle(j*W_CELLS, i*H_CELLS, j*W_CELLS+W_CELLS, i*H_CELLS+H_CELLS, fill="white")
-        self.canvas.update()
+                    self.canvas.itemconfig(self.canvas_grid[i][j], fill="white")
+        
+        self.canvas.after(100, self.draw_grid)
+
 
     def update(self):
         """update the grid"""
@@ -97,6 +109,3 @@ class Game(object):
 
 if __name__ == "__main__":
     game = Game()
-    while True:
-        game.update()
-        game.draw_grid()
