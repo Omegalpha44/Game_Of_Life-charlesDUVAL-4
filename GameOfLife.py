@@ -76,7 +76,7 @@ class Game(object):
             else:
                 return 0
         else:
-            if nb_neighbors >= 3:
+            if nb_neighbors == 3:
                 return 1
 
     def count_neighbors(self, i, j):
