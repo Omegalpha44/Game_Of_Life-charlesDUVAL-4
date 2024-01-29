@@ -1,10 +1,6 @@
 import tkinter as tk 
 import random
-import time
-import ctypes
-import threading 
-import sys
-import os
+
 '''
 Game of Life game using tkinter for its display.
 required : tkinter and python3
