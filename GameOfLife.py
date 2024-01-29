@@ -1,6 +1,6 @@
 import tkinter as tk 
 import random
-
+import time
 '''
 Game of Life game using tkinter for its display.
 required : tkinter and python3
@@ -11,7 +11,7 @@ required : tkinter and python3
 SIZE_W = 50 # wideness of the grid 
 SIZE_H = 50 # height of the grid
 
-INITIAL_POPULATION = 0.2 # initial population of the grid
+INITIAL_POPULATION = 0.1 # initial population of the grid
 
 
 
@@ -42,6 +42,9 @@ class Game(object):
                     self.grid[i][j] = 0
     
     def draw_grid(self):
+        # cleanse the board
+        self.canvas.delete("all")
+        # draw the grid
         for i in range(SIZE_H):
             for j in range(SIZE_W):
                 if self.grid[i][j] == 1:
@@ -80,7 +83,7 @@ class Game(object):
                     nb_neighbors += 1
         return nb_neighbors
 
-    def quit(self):
+    def quit(self, any=None):
         self.root.destroy()
 
 
@@ -90,3 +93,4 @@ if __name__ == "__main__":
     while True:
         game.update()
         game.draw_grid()
+        time.sleep(0.2)
