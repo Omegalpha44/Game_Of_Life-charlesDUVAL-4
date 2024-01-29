@@ -93,4 +93,4 @@ if __name__ == "__main__":
     while True:
         game.update()
         game.draw_grid()
-        time.sleep(0.2)
+        time.sleep(0.1)
