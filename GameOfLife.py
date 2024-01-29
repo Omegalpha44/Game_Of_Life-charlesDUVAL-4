@@ -47,9 +47,7 @@ class Game(object):
         self.canvas_grid = [[0 for _ in range(SIZE_W)] for _ in range(SIZE_H)]
         
         self.init_grid()
-        
         self.draw_grid()
-        self.canvas.after(1000, self.update)
         self.root.mainloop()
     
     def init_grid(self):
